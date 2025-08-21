@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Situs Web Tidak Ditemukan</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #0d0d0d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .logo {
+      width: 250px;
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 15px rgba(255,60,43,0.7));
+    }
+
+    h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      color: #ff3c2b;
+      text-shadow: 0 0 15px rgba(255, 60, 43, 0.6);
+      margin-bottom: 15px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #ddd;
+      margin-bottom: 30px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .btn {
+      background: #ff3c2b;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(255, 60, 43, 0.7);
+      transition: 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+      background: #ff1f0f;
+      box-shadow: 0 0 25px rgba(255, 60, 43, 0.9);
+      transform: scale(1.05);
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px rgba(255,60,43,0.5), 0 0 20px rgba(255,60,43,0.3); }
+      to { text-shadow: 0 0 25px rgba(255,60,43,0.9), 0 0 40px rgba(255,60,43,0.7); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Particles -->
+  <canvas id="particles"></canvas>
+
+  <!-- Logo Brand -->
+  <img src="https://raw.githubusercontent.com/arthasa28/404-arthasa.my.id/refs/heads/master/logo-brand.png" alt="Brand Logo" class="logo">
+
+  <!-- Text -->
+  <h1>Situs Web Tidak Ditemukan</h1>
+  <p>Maaf, Halaman Web Tidak Ditemukan</p>
+  <a href="https://store.arthasa.my.id/" class="btn">Kembali ke Beranda</a>
+
+  <script>
+    // Particles background
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.speedY = (Math.random() - 0.5) * 0.5;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff3c2b";
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < 120; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+  </script>
+</body>
+</html>
