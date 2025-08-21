@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 Not Found</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #0d0d0d;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .logo {
+      width: 220px;
+      margin-bottom: 25px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    h1 {
+      font-size: 6rem;
+      font-weight: 700;
+      color: #ff3c2b;
+      text-shadow: 0 0 20px rgba(255, 60, 43, 0.7);
+      margin-bottom: 15px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    p {
+      font-size: 1.3rem;
+      color: #ddd;
+      margin-bottom: 25px;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    .btn {
+      background: #ff3c2b;
+      color: white;
+      padding: 12px 28px;
+      border-radius: 30px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(255, 60, 43, 0.7);
+      transition: 0.3s ease-in-out;
+    }
+
+    .btn:hover {
+      background: #ff1f0f;
+      box-shadow: 0 0 25px rgba(255, 60, 43, 0.9);
+      transform: scale(1.05);
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 10px rgba(255,60,43,0.5), 0 0 20px rgba(255,60,43,0.3); }
+      to { text-shadow: 0 0 30px rgba(255,60,43,0.9), 0 0 50px rgba(255,60,43,0.7); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="particles"></canvas>
+
+  <img src="https://raw.githubusercontent.com/arthasa28/404-arthasa.my.id/refs/heads/master/logo-brand.png" alt="Logo Brand" class="logo">
+  <h1>404</h1>
+  <p>Oops! The page you are looking for does not exist.</p>
+  <a href="https://store.arthasa.my.id/" class="btn">Kembali ke Beranda</a>
+
+  <script>
+    const canvas = document.getElementById("particles");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particlesArray;
+
+    class Particle {
+      constructor(x, y, size, speedX, speedY) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.speedX = speedX;
+        this.speedY = speedY;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.size > 0.2) this.size -= 0.02;
+      }
+      draw() {
+        ctx.fillStyle = "rgba(255, 60, 43, 0.8)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      particlesArray = [];
+      for (let i = 0; i < 100; i++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height;
+        let size = Math.random() * 3 + 1;
+        let speedX = (Math.random() * 1) - 0.5;
+        let speedY = (Math.random() * 1) - 0.5;
+        particlesArray.push(new Particle(x, y, size, speedX, speedY));
+      }
+    }
+
+    function handleParticles() {
+      for (let i = 0; i < particlesArray.length; i++) {
+        particlesArray[i].update();
+        particlesArray[i].draw();
+
+        for (let j = i; j < particlesArray.length; j++) {
+          const dx = particlesArray[i].x - particlesArray[j].x;
+          const dy = particlesArray[i].y - particlesArray[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          if (distance < 100) {
+            ctx.beginPath();
+            ctx.strokeStyle = "rgba(255,60,43,0.1)";
+            ctx.lineWidth = 1;
+            ctx.moveTo(particlesArray[i].x, particlesArray[i].y);
+            ctx.lineTo(particlesArray[j].x, particlesArray[j].y);
+            ctx.stroke();
+            ctx.closePath();
+          }
+        }
+        if (particlesArray[i].size <= 0.3) {
+          particlesArray.splice(i, 1);
+          i--;
+        }
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      handleParticles();
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener("resize", function() {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+      init();
+    });
+
+    init();
+    animate();
+  </script>
+</body>
+</html>
