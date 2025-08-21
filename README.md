@@ -51,6 +51,3 @@ Panel admin untuk konfigurasi sistem & manajemen user.
 </p>
 
 ---
-# Jalankan
-# Jalankan server
-npm run start
